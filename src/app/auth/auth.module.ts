@@ -4,17 +4,17 @@ import { FormsModule } from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { ReceipeDetailPageRoutingModule } from './receipe-detail-routing.module';
+import { AuthPageRoutingModule } from './auth-routing.module';
 
-import { ReceipeDetailPage } from './receipe-detail.page';
+import { AuthPage } from './auth.page';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
-    ReceipeDetailPageRoutingModule
+    AuthPageRoutingModule
   ],
-  declarations: [ReceipeDetailPage]
+  declarations: [AuthPage]
 })
-export class ReceipeDetailPageModule {}
+export class AuthPageModule {}

@@ -8,9 +8,10 @@ const routes: Routes = [
     redirectTo: 'receipe',
     pathMatch: 'full'
   },
+
   {
-    path: 'receipe',
-    loadChildren: () => import('./receipe/receipe.module').then( m => m.ReceipePageModule)
+    path: 'auth',
+    loadChildren: () => import('./auth/auth.module').then( m => m.AuthPageModule)
   },
 ];
 
