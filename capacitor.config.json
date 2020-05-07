@@ -1,5 +1,5 @@
 {
-  "appId": "io.ionic-starter-project.shrikant",
+  "appId": "io.ionic.project.shrikant",
   "appName": "ionic-project",
   "bundledWebRuntime": false,
   "npmClient": "npm",
@@ -8,6 +8,8 @@
   "cordova": {},
   "server": {
     "url": "http://192.168.0.108:8100",
-    "cleartext": true
+    "cleartext": true,
+    "originalUrl": "http://192.168.0.108:8100",
+    "originalCleartext": true
   }
 }
