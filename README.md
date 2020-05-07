@@ -1,4 +1,4 @@
-# ionic-receipe
+# ionic-project
 Project which explain basic ionic with angular.
 
 

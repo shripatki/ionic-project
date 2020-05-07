@@ -1,6 +1,6 @@
 {
-  "appId": "io.ionic-starter.shrikant",
-  "appName": "ionic-receipe",
+  "appId": "io.ionic-starter-project.shrikant",
+  "appName": "ionic-project",
   "bundledWebRuntime": false,
   "npmClient": "npm",
   "webDir": "www",
