@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
+import { Place } from '../../place.model';
+import { PlacesService } from '../../places.service';
 
 @Component({
   selector: 'app-offer-bookings',
@@ -8,10 +10,17 @@ import { NavController } from '@ionic/angular';
   styleUrls: ['./offer-bookings.page.scss'],
 })
 export class OfferBookingsPage implements OnInit {
-  constructor(private router:Router,
-    private navController:NavController) { }
+  place:Place;
+
+
+  constructor(private router:ActivatedRoute,
+    private navController:NavController,
+    private placeService:PlacesService) { }
 
   ngOnInit() {
+    this.router.paramMap.subscribe(paramMap=>{
+      this.place = this.placeService.getplace(paramMap.get("placeId"))   
+    })
   }
 
   onAvailOffer(){

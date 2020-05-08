@@ -5,6 +5,7 @@ import { Place } from "./place.model";
   providedIn: "root",
 })
 export class PlacesService {
+  
   private _places: Place[]=[
     new Place(
     'p1',
@@ -32,5 +33,17 @@ export class PlacesService {
 
   getplaces():Place[]{
     return [...this._places];
+  }
+
+  getplace(placeId: string): Place {
+    return {...this.getplaces().find(place=>{
+      return place.id === placeId;
+    })}
+  }
+
+  deletePlace(placeId:string){
+    this._places = this._places.filter(place =>{
+      return place.id != placeId;
+    })
   }
 }
