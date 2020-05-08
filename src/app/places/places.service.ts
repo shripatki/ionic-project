@@ -11,14 +11,14 @@ export class PlacesService {
     'p1',
     'Hyatt Regency Pune & Residences',
     'Weikfield IT Park, Pune Nagar Road, Pune, Maharashtra 411014•020 6645 1234',
-    'https://lh3.googleusercontent.com/p/AF1QipNde2iNxuV2VYJw94o6GfOSPYJLdaVxePteiy5i=w296-h202-n-k-rw-no-v1',
+    'https://pix6.agoda.net/hotelImages/297839/-1/0382e44b43964ca61d32aee6df4b9d28.jpg?s=1024x768',
     8000
     ),
     new Place(
     'p2',
     'The O Hotel',
     'Plot No, 293, N Main Rd, Vaswani Nagar, Ragvilas Society, Koregaon Park, Pune, Maharashtra 411001•020 4001 1000',
-    'https://lh3.googleusercontent.com/p/AF1QipNsKgHJUJS-jme_IA9TnI1rizdyFebvArsuNXWg=w296-h202-n-k-rw-no-v1',
+    'https://pix6.agoda.net/hotelImages/10558276/0/2b0a2168a814484ad4a4c3bf7fc9e3bd.jpg?s=450x450',
     5400
     ),
     new Place(
