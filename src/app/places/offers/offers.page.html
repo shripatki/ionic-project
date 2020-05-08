@@ -1,11 +1,14 @@
 <ion-header>
   <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button menu="m1"></ion-menu-button>
+    </ion-buttons>
+    <ion-title>My Offers</ion-title>
     <ion-buttons slot="primary">
       <ion-button routerLink="/places/tabs/offers/new">
         <ion-icon name="add" slot="icon-only"></ion-icon>
       </ion-button>
     </ion-buttons>
-    <ion-title>My Offers</ion-title>
   </ion-toolbar>
 </ion-header>
 <ion-content class="ion-padding">
@@ -22,7 +25,7 @@
               <ion-img [src]="offer.imageUrl"></ion-img>
             </ion-thumbnail>
             <ion-label>
-              <h1>{{offer.title}}</h1>
+              {{offer.title}}
             </ion-label>
           </ion-item>
         </ion-list>
