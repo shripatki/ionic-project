@@ -19,6 +19,9 @@ export class PlaceDetailPage implements OnInit {
 
     ngOnInit() {
       this.router.paramMap.subscribe(paramMap=>{
+        if(!paramMap.get("placeId")){
+          this.navController.navigateBack('/places/tabs/discover')
+        }
         this.place = this.placeService.getplace(paramMap.get("placeId"))   
       })
     }
