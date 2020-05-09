@@ -4,7 +4,7 @@ export class Booking{
         public placeId:string,
         public userId:string,
         public placeTitle:string,
-        public guestNumber:string,
+        public guestNumber:number,
     ){
         
     }
