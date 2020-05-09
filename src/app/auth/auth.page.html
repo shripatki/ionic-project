@@ -15,8 +15,6 @@
       <ion-input type="password"></ion-input>
     </ion-item>
   </ion-list>
-  <div class="ion-text-center">
-  <ion-spinner *ngIf="isLoading" color="primary"></ion-spinner>
-  </div>
+ 
   <ion-button color="primary" (click)="onLogin()" *ngIf="!isLoading">Login</ion-button>
 </ion-content>
