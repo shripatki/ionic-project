@@ -47,8 +47,9 @@
             [routerLink]="['/','places','tabs','discover',place.id]"
             detail
           >
-            <ion-thumbnail slot="start">
-              <ion-img [src]="place.imageUrl"></ion-img>
+          <!-- <ion-avatar></ion-avatar>  this is used for rouded image-->
+            <ion-thumbnail slot="start"> <!-- this is used for the square image -->
+              <ion-img [src]="place.imageUrl"></ion-img><!-- Load image Lazyly -->
             </ion-thumbnail>
             <ion-label>
               <h2>{{place.title}}</h2>
