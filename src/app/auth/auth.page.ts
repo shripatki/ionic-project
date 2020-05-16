@@ -11,6 +11,7 @@ import { NgForm } from '@angular/forms';
 })
 export class AuthPage implements OnInit {
   isLoading:boolean;
+  isLogin:boolean=true;
   @ViewChild('f1',{static:false}) form: any;
 
   constructor(
@@ -37,7 +38,21 @@ export class AuthPage implements OnInit {
   onSubmit(f:any){
     console.log(this.form);
     console.log(f);
+    if(!this.form.valid){
+      return;
+    }
+    const email = this.form.value.email
+    const password = this.form.value.password
+    if(this.isLogin){
+      //LOGIN
+    }else{
+      //SIGN UP
+    }
     this.onLogin();
+  }
+
+  onSwichAuthMode(){
+    this.isLogin =!this.isLogin;
   }
 
 }
