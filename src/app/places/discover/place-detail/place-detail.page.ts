@@ -4,6 +4,7 @@ import { NavController, ModalController, ActionSheetController } from '@ionic/an
 import { PlacesService } from '../../places.service';
 import { Place } from '../../place.model';
 import { CreateBookingComponent } from '../../../bookings/create-booking/create-booking.component';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-place-detail',
@@ -12,6 +13,7 @@ import { CreateBookingComponent } from '../../../bookings/create-booking/create-
 })
 export class PlaceDetailPage implements OnInit {
   place:Place;
+  private placeSub:Subscription;
   constructor(private router:ActivatedRoute,
     private navController:NavController,
     private placeService:PlacesService,
@@ -23,7 +25,9 @@ export class PlaceDetailPage implements OnInit {
         if(!paramMap.get("placeId")){
           this.navController.navigateBack('/places/tabs/discover')
         }
-        this.place = this.placeService.getplace(paramMap.get("placeId"))   
+        this.placeSub = this.placeService.getplace(paramMap.get("placeId")).subscribe(place=>{
+          this.place = place;
+        })  
       })
     }
 
@@ -75,6 +79,15 @@ export class PlaceDetailPage implements OnInit {
       }
      
     })
+  }
+
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if(this.placeSub){
+
+      this.placeSub.unsubscribe()
+    }
   }
 
 }

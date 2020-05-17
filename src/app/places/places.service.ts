@@ -1,13 +1,15 @@
 import { Injectable } from "@angular/core";
 import { Place } from "./place.model";
 import { AuthService } from '../auth/auth.service';
+import { BehaviorSubject } from 'rxjs';
+import { take, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: "root",
 })
 export class PlacesService {
   
-  private _places: Place[]=[
+  private _places = new BehaviorSubject<Place[]>([
     new Place(
     'p1',
     'Hyatt Regency Pune & Residences',
@@ -38,17 +40,20 @@ export class PlacesService {
     new Date('2019-12-31'),
     'abc'
     )
-  ]
+  ]);
   constructor(private authService:AuthService) {}
 
-  getplaces():Place[]{
-    return [...this._places];
+  get places(){
+    return this._places.asObservable();
   }
 
-  getplace(placeId: string): Place {
-    return {...this.getplaces().find(place=>{
-      return place.id === placeId;
-    })}
+  getplace(placeId: string) {
+    return this.places.pipe(
+      take(1),
+      map(places=>{
+      return {...places.find(place => place.id==placeId)}
+    }));
+   
   }
 
   addPlace(title:string,description:string,price:number,dateFrom:Date,dateTo:Date){
@@ -62,13 +67,16 @@ export class PlacesService {
       dateTo,
       this.authService.userId
       );
-      this._places.push(newPlace);
+      this.places.pipe(take(1)).subscribe((places:Place[])=>{
+        this._places.next(places.concat(newPlace));
+      })
+      
       console.log(this._places);
   }
 
   deletePlace(placeId:string){
-    this._places = this._places.filter(place =>{
+   /*  this._places = this._places.filter(place =>{
       return place.id != placeId;
-    })
+    }) */
   }
 }

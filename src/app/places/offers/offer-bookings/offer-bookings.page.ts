@@ -3,6 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { NavController } from '@ionic/angular';
 import { Place } from '../../place.model';
 import { PlacesService } from '../../places.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-offer-bookings',
@@ -11,7 +12,7 @@ import { PlacesService } from '../../places.service';
 })
 export class OfferBookingsPage implements OnInit {
   place:Place;
-
+  private placeSub:Subscription;
 
   constructor(private router:ActivatedRoute,
     private navController:NavController,
@@ -19,12 +20,25 @@ export class OfferBookingsPage implements OnInit {
 
   ngOnInit() {
     this.router.paramMap.subscribe(paramMap=>{
-      this.place = this.placeService.getplace(paramMap.get("placeId"))   
+      if(paramMap.has('placeId')){
+        this.navController.navigateBack('/places/tabs/offers')
+      }
+      this.placeSub = this.placeService.getplace(paramMap.get("placeId")).subscribe(place=>{
+        this.place = place;
+      })  
     })
   }
 
   onAvailOffer(){
     //this.router.navigateByUrl('/places/tabs/discover');
    this.navController.navigateBack('/places/tabs/offers');
+  }
+  ngOnDestroy(): void {
+    //Called once, before the instance is destroyed.
+    //Add 'implements OnDestroy' to the class.
+    if(this.placeSub){
+
+      this.placeSub.unsubscribe()
+    }
   }
 }
