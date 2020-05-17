@@ -17,8 +17,8 @@ export class BookingsPage implements OnInit {
     this.loadedBooking = this.bookingService.getBookings();
   }
 
-  deleteOffer(bookingId:string, slidingIyem:IonItemSliding){
-    slidingIyem.close();
+  deleteOffer(bookingId:string, slidingItem:IonItemSliding){
+    slidingItem.close();
     
     //this.bookingService.deleteBooking(bookingId);
   }
