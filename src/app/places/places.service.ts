@@ -1,5 +1,6 @@
 import { Injectable } from "@angular/core";
 import { Place } from "./place.model";
+import { AuthService } from '../auth/auth.service';
 
 @Injectable({
   providedIn: "root",
@@ -14,7 +15,8 @@ export class PlacesService {
     'https://pix6.agoda.net/hotelImages/297839/-1/0382e44b43964ca61d32aee6df4b9d28.jpg?s=1024x768',
     8000,
     new Date('2019-01-01'),
-    new Date('2019-12-31')
+    new Date('2019-12-31'),
+    'abc'
     ),
     new Place(
     'p2',
@@ -23,7 +25,8 @@ export class PlacesService {
     'https://pix6.agoda.net/hotelImages/10558276/0/2b0a2168a814484ad4a4c3bf7fc9e3bd.jpg?s=450x450',
     5400,
     new Date('2019-01-01'),
-    new Date('2019-12-31')
+    new Date('2019-12-31'),
+    'abc'
     ),
     new Place(
     'p3',
@@ -32,10 +35,11 @@ export class PlacesService {
     'https://lh3.googleusercontent.com/proxy/EtmaxOMgY5kmvs7Dl53djr3D_eQBNOuhZdmCwK1FfHQB-92pm71qEj5JpuJT7xbEF5J5p1uqnIXyCMPA7F4o3UaJ96yo90FE-8Kjj5d86UP0FUtvMvjDwClv_e7hlRelKQf9f_cwFLUhk5wSDNhKGznhAlqebQ=w296-h202-n-k-rw-no-v1',
     4500,
     new Date('2019-01-01'),
-    new Date('2019-12-31')
+    new Date('2019-12-31'),
+    'abc'
     )
   ]
-  constructor() {}
+  constructor(private authService:AuthService) {}
 
   getplaces():Place[]{
     return [...this._places];
@@ -45,6 +49,21 @@ export class PlacesService {
     return {...this.getplaces().find(place=>{
       return place.id === placeId;
     })}
+  }
+
+  addPlace(title:string,description:string,price:number,dateFrom:Date,dateTo:Date){
+    const newPlace = new Place(
+      Math.random().toString(),
+      title,
+      description,
+      'https://pix6.agoda.net/hotelImages/297839/-1/0382e44b43964ca61d32aee6df4b9d28.jpg?s=1024x768',
+      price,
+      dateFrom,
+      dateTo,
+      this.authService.userId
+      );
+      this._places.push(newPlace);
+      console.log(this._places);
   }
 
   deletePlace(placeId:string){
