@@ -20,7 +20,7 @@ export class OfferBookingsPage implements OnInit {
 
   ngOnInit() {
     this.router.paramMap.subscribe(paramMap=>{
-      if(paramMap.has('placeId')){
+      if(!paramMap.has('placeId')){
         this.navController.navigateBack('/places/tabs/offers')
       }
       this.placeSub = this.placeService.getplace(paramMap.get("placeId")).subscribe(place=>{
