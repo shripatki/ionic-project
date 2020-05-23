@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BookingService } from './booking.service';
 import { Booking } from './booking.model';
-import { IonItemSliding, AlertController } from '@ionic/angular';
+import { IonItemSliding, AlertController, LoadingController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -13,7 +13,8 @@ export class BookingsPage implements OnInit {
   loadedBooking:Booking[];
   bookingsubscription:Subscription;
   constructor(private bookingService:BookingService,
-    private alertController:AlertController) { }
+    private alertController:AlertController,
+    private loadingController:LoadingController) { }
 
   ngOnInit() {
     this.bookingsubscription = this.bookingService.bookings.subscribe(bookings=>{
@@ -23,8 +24,14 @@ export class BookingsPage implements OnInit {
 
   deleteOffer(bookingId:string, slidingItem:IonItemSliding){
     slidingItem.close();
-    
-    //this.bookingService.deleteBooking(bookingId);
+    this.loadingController.create({
+      message:'Deleting Booking...'
+    }).then(loadingEle=>{
+      loadingEle.present();
+      this.bookingService.deleteBooking(bookingId).subscribe(data=>{
+        loadingEle.dismiss();
+    });
+    });
   }
 
   ngOnDestroy(): void {

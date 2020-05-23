@@ -53,8 +53,12 @@ export class BookingService {
   }
 
   deleteBooking(bookingId: string) {
-    /* this._bookings = this._bookings.filter(booking =>{
-      return booking.id != bookingId;
-    }) */
+    return this.bookings.pipe(
+      take(1),
+      delay(1000),
+      tap((bookings: Booking[]) => {
+        this._bookings.next(bookings.filter(booking=> booking.id !== bookingId));
+      })
+    );
   }
 }
