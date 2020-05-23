@@ -28,7 +28,7 @@ export class PlacesService {
       new Date("2019-01-01"),
       new Date("2019-12-31"),
       "abc"
-    ),
+    ), 
     new Place(
       "p3",
       "Sayaji Hotel",
