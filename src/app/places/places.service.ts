@@ -2,12 +2,14 @@ import { Injectable } from "@angular/core";
 import { Place } from "./place.model";
 import { AuthService } from "../auth/auth.service";
 import { BehaviorSubject } from "rxjs";
-import { take, map, tap, delay } from "rxjs/operators";
+import { take, map, tap, delay, switchMap } from "rxjs/operators";
+import { HttpClient } from "@angular/common/http";
 
 @Injectable({
   providedIn: "root",
 })
 export class PlacesService {
+  genaratedId:string;
   private _places = new BehaviorSubject<Place[]>([
     new Place(
       "p1",
@@ -28,7 +30,7 @@ export class PlacesService {
       new Date("2019-01-01"),
       new Date("2019-12-31"),
       "abc"
-    ), 
+    ),
     new Place(
       "p3",
       "Sayaji Hotel",
@@ -40,7 +42,7 @@ export class PlacesService {
       "xyz"
     ),
   ]);
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private http: HttpClient) {}
 
   get places() {
     return this._places.asObservable();
@@ -72,13 +74,28 @@ export class PlacesService {
       dateTo,
       this.authService.userId
     );
-    return this.places.pipe(
+    return this.http
+      .post<{ name: string }>(
+        "https://ionic-hotel-booking-6722e.firebaseio.com/offer-places.json",
+        { ...newPlace, id: null }
+      )
+      .pipe(
+        switchMap(resData=>{
+          this.genaratedId = resData.name;
+          return this.places
+        }),
+        take(1),
+        tap(places=>{
+          newPlace.id = this.genaratedId;
+          this._places.next(places.concat(newPlace));
+        })
+      );
+    /* return this.places.pipe(
       take(1),
       delay(1000),
       tap((places: Place[]) => {
-        this._places.next(places.concat(newPlace));
       })
-    );
+    ); */
 
     console.log(this._places);
   }
