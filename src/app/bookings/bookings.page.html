@@ -10,7 +10,7 @@
 <ion-content>
   <ion-grid>
     <ion-row>
-      <ion-col size-md="6" offset-md="3">
+      <ion-col size-md="6" offset-md="3" *ngIf="loadedBooking && loadedBooking.length > 0;else noReultTemplate">
         <ion-list>
           <ion-item-sliding *ngFor="let booking of loadedBooking" #slidingItem>
             <ion-item>
@@ -27,6 +27,11 @@
           </ion-item-sliding>
         </ion-list>
       </ion-col>
+      <ng-template #noReultTemplate>
+        <ion-col size-md="6" offset-md="3" class="ion-text-center">
+          <ion-label>There are no booking available</ion-label>
+        </ion-col>
+      </ng-template>
     </ion-row>
   </ion-grid>
  

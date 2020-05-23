@@ -32,7 +32,7 @@ export class DiscoverPage implements OnInit {
     if(event.detail.value === 'all'){
       this.releventPlaces = this.loadedPlaces;
     }else{
-      this.releventPlaces = this.loadedPlaces.filter(place => place.userId !== this.authService.userId);
+      this.releventPlaces = this.loadedPlaces.filter(place => place.userId == this.authService.userId);
     }
     this.listOfloadedPlaces = this.releventPlaces.slice(1);
 
