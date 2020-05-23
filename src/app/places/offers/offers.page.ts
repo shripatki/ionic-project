@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Place } from '../place.model';
 import { PlacesService } from '../places.service';
-import { NavController, IonItemSliding } from '@ionic/angular';
+import { NavController, IonItemSliding, LoadingController } from '@ionic/angular';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -12,15 +12,24 @@ import { Subscription } from 'rxjs';
 export class OffersPage implements OnInit {
   offers:Place[];
   placesSubscription: Subscription;
+  isloading:boolean;
   constructor(
     private placesService:PlacesService,
-    private navController:NavController
+    private navController:NavController,
     ) { }
 
   ngOnInit() {
     this.placesSubscription=  this.placesService.places.subscribe(places=>{
       this.offers = places;
     });
+  }
+
+  ionViewWillEnter(){
+    this.isloading= true;
+    this.placesService.fetchPlaces().subscribe(data=>{
+      this.isloading = false;
+    });
+
   }
 
   onEdit(placeId:string,slidingItem:IonItemSliding){

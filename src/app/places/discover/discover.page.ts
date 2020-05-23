@@ -15,6 +15,7 @@ export class DiscoverPage implements OnInit {
   listOfloadedPlaces:Place[];
   releventPlaces:Place[];
   placesSubscription: Subscription;
+  isloading:boolean;
 
   constructor(private placesService:PlacesService,
     private authService:AuthService
@@ -26,6 +27,14 @@ export class DiscoverPage implements OnInit {
       this.releventPlaces = [...places]
       this.listOfloadedPlaces = this.loadedPlaces.slice(1);
     });
+  }
+
+  ionViewWillEnter(){
+    this.isloading= true;
+    this.placesService.fetchPlaces().subscribe(data=>{
+      this.isloading = false;
+    });
+
   }
 
   onFilterUpdate(event:CustomEvent<SegmentChangeEventDetail>){
