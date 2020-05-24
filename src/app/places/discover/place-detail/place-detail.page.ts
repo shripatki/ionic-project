@@ -5,6 +5,7 @@ import {
   ModalController,
   ActionSheetController,
   LoadingController,
+  AlertController,
 } from "@ionic/angular";
 import { PlacesService } from "../../places.service";
 import { Place } from "../../place.model";
@@ -31,7 +32,8 @@ export class PlaceDetailPage implements OnInit {
     private actionSheetController: ActionSheetController,
     private bookingServiice: BookingService,
     private loadingController:LoadingController,
-    private authService:AuthService
+    private authService:AuthService,
+    private alertController:AlertController
   ) {}
 
   ngOnInit() {
@@ -46,6 +48,21 @@ export class PlaceDetailPage implements OnInit {
           this.place = place;
           this.isLoading = false;
           this.isBookable = place.userId == this.authService.userId
+        },error=>{
+          this.alertController.create({
+            header:'An error occured',
+            message:'Place could not be fetched,Please try aging later',
+            buttons:[
+              {
+                text:'Ok',
+                handler:()=>{
+                  this.navController.navigateBack("/places/tabs/discover");
+                }
+              }
+            ]
+          }).then(alertEle=>{
+            alertEle.present();
+          })
         });
     });
   }

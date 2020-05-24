@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
-import { NavController } from '@ionic/angular';
+import { NavController, AlertController } from '@ionic/angular';
 import { Place } from '../../place.model';
 import { PlacesService } from '../../places.service';
 import { Subscription } from 'rxjs';
@@ -17,7 +17,8 @@ export class OfferBookingsPage implements OnInit {
 
   constructor(private router:ActivatedRoute,
     private navController:NavController,
-    private placeService:PlacesService) { }
+    private placeService:PlacesService,
+    private alertController:AlertController) { }
 
   ngOnInit() {
     this.router.paramMap.subscribe(paramMap=>{
@@ -28,6 +29,21 @@ export class OfferBookingsPage implements OnInit {
       this.placeSub = this.placeService.getplace(paramMap.get("placeId")).subscribe(place=>{
         this.place = place;
         this.isLoading = false;
+      },error=>{
+        this.alertController.create({
+          header:'An error occured',
+          message:'Place could not be fetched, Please try aging later',
+          buttons:[
+            {
+              text:'Ok',
+              handler:()=>{
+                this.navController.navigateBack("/places/tabs/offers");
+              }
+            }
+          ]
+        }).then(alertEle=>{
+          alertEle.present();
+        })
       })  
     })
   }

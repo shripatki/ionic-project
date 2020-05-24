@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Place } from '../../place.model';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PlacesService } from '../../places.service';
-import { NavController, LoadingController } from '@ionic/angular';
+import { NavController, LoadingController, AlertController } from '@ionic/angular';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { Subscription } from 'rxjs';
 
@@ -22,7 +22,8 @@ export class EditOfferPage implements OnInit {
     private placeService:PlacesService,
     private navController:NavController,
     private loadingContoller:LoadingController,
-    private router:Router
+    private router:Router,
+    private alertController:AlertController
     ) { }
 
     ngOnInit() {
@@ -49,6 +50,21 @@ export class EditOfferPage implements OnInit {
         )
         });
         this.isLoading = false;
+      },error=>{
+        this.alertController.create({
+          header:'An error occured',
+          message:'Place could not be fetched,Please try aging later',
+          buttons:[
+            {
+              text:'Ok',
+              handler:()=>{
+                this.router.navigateByUrl('/places/tabs/offers')
+              }
+            }
+          ]
+        }).then(alertEle=>{
+          alertEle.present();
+        })
       });
       });
     }
