@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { Place } from "./place.model";
 import { AuthService } from "../auth/auth.service";
-import { BehaviorSubject } from "rxjs";
+import { BehaviorSubject, of } from "rxjs";
 import { take, map, tap, delay, switchMap } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 
@@ -118,6 +118,13 @@ export class PlacesService {
     return this.places.pipe(
       take(1),
       switchMap((places) => {
+        if(!places || places.length <= 0){
+          return this.fetchPlaces();
+        } else {
+          of(places)
+        }
+      }),
+      switchMap(places=>{
         const placeIndex = places.findIndex((place) => place.id === placeId);
         updatedPlaces = [...places];
         const oldPlace = updatedPlaces[placeIndex];
