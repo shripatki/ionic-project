@@ -121,7 +121,7 @@ export class PlacesService {
         if(!places || places.length <= 0){
           return this.fetchPlaces();
         } else {
-          of(places)
+          return of(places);
         }
       }),
       switchMap(places=>{
