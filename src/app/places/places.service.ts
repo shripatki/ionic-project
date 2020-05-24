@@ -5,20 +5,20 @@ import { BehaviorSubject } from "rxjs";
 import { take, map, tap, delay, switchMap } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
 
-interface PlaceData{
-   title:string;
-   description:string;
-   imageUrl:string;
-   price:number;
-   availableFrom:string;
-   availableTo:string;
-   userId:string;
+interface PlaceData {
+  title: string;
+  description: string;
+  imageUrl: string;
+  price: number;
+  availableFrom: string;
+  availableTo: string;
+  userId: string;
 }
 @Injectable({
   providedIn: "root",
 })
 export class PlacesService {
-  genaratedId:string;
+  genaratedId: string;
   private _places = new BehaviorSubject<Place[]>([]);
   constructor(private authService: AuthService, private http: HttpClient) {}
 
@@ -26,42 +26,57 @@ export class PlacesService {
     return this._places.asObservable();
   }
 
-  fetchPlaces(){
-    return this.http.get<{[key:string]:PlaceData}>("https://ionic-hotel-booking-6722e.firebaseio.com/offer-places.json")
-    .pipe(
-      map(resdata=>{
-        const places = [];
-        for(const key in resdata){
-          if(resdata.hasOwnProperty(key)){
-            places.push(
-              new Place(
-                key,
-                resdata[key].title,
-                resdata[key].description,
-                resdata[key].imageUrl,
-                resdata[key].price,
-                new Date(resdata[key].availableFrom),
-                new Date(resdata[key].availableTo),
-                resdata[key].userId
-              )
-            )
+  fetchPlaces() {
+    return this.http
+      .get<{ [key: string]: PlaceData }>(
+        "https://ionic-hotel-booking-6722e.firebaseio.com/offer-places.json"
+      )
+      .pipe(
+        map((resdata) => {
+          const places = [];
+          for (const key in resdata) {
+            if (resdata.hasOwnProperty(key)) {
+              places.push(
+                new Place(
+                  key,
+                  resdata[key].title,
+                  resdata[key].description,
+                  resdata[key].imageUrl,
+                  resdata[key].price,
+                  new Date(resdata[key].availableFrom),
+                  new Date(resdata[key].availableTo),
+                  resdata[key].userId
+                )
+              );
+            }
           }
-        }
-        return places;
-      }),
-      tap(places=>{
-        this._places.next(places);
-      })
-    );
+          return places;
+        }),
+        tap((places) => {
+          this._places.next(places);
+        })
+      );
   }
 
   getplace(placeId: string) {
-    return this.places.pipe(
-      take(1),
-      map((places) => {
-        return { ...places.find((place) => place.id == placeId) };
-      })
-    );
+    return this.http
+      .get<PlaceData>(
+        `https://ionic-hotel-booking-6722e.firebaseio.com/offer-places/${placeId}.json`
+      )
+      .pipe(
+        map((placeData) => {
+          return new Place(
+            placeId,
+            placeData.title,
+            placeData.description,
+            placeData.imageUrl,
+            placeData.price,
+            new Date(placeData.availableFrom),
+            new Date(placeData.availableTo),
+            placeData.userId
+          );
+        })
+      );
   }
 
   addPlace(
@@ -87,22 +102,22 @@ export class PlacesService {
         { ...newPlace, id: null }
       )
       .pipe(
-        switchMap(resData=>{
+        switchMap((resData) => {
           this.genaratedId = resData.name;
-          return this.places
+          return this.places;
         }),
         take(1),
-        tap(places=>{
+        tap((places) => {
           newPlace.id = this.genaratedId;
           this._places.next(places.concat(newPlace));
         })
       );
   }
   updatePlace(placeId: string, title: string, description: string) {
-    let updatedPlaces:Place[]=[];
+    let updatedPlaces: Place[] = [];
     return this.places.pipe(
       take(1),
-      switchMap(places=>{
+      switchMap((places) => {
         const placeIndex = places.findIndex((place) => place.id === placeId);
         updatedPlaces = [...places];
         const oldPlace = updatedPlaces[placeIndex];
@@ -116,15 +131,15 @@ export class PlacesService {
           oldPlace.availableTo,
           oldPlace.userId
         );
-        return this.http.put(`https://ionic-hotel-booking-6722e.firebaseio.com/offer-places/${placeId}.json`,
-        {...updatedPlaces[placeIndex],id:null});
+        return this.http.put(
+          `https://ionic-hotel-booking-6722e.firebaseio.com/offer-places/${placeId}.json`,
+          { ...updatedPlaces[placeIndex], id: null }
+        );
       }),
-      tap(()=>{
+      tap(() => {
         this._places.next(updatedPlaces);
-      }));
-
-
-    
+      })
+    );
 
     console.log(this._places);
   }

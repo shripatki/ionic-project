@@ -22,6 +22,7 @@ export class PlaceDetailPage implements OnInit {
   place: Place;
   private placeSub: Subscription;
   isBookable:boolean;
+  isLoading:boolean;
   constructor(
     private router: ActivatedRoute,
     private navController: NavController,
@@ -38,10 +39,12 @@ export class PlaceDetailPage implements OnInit {
       if (!paramMap.get("placeId")) {
         this.navController.navigateBack("/places/tabs/discover");
       }
+      this.isLoading = true;
       this.placeSub = this.placeService
         .getplace(paramMap.get("placeId"))
         .subscribe((place) => {
           this.place = place;
+          this.isLoading = false;
           this.isBookable = place.userId == this.authService.userId
         });
     });

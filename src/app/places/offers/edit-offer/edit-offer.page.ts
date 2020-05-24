@@ -15,6 +15,9 @@ export class EditOfferPage implements OnInit {
   place:Place;
   form:FormGroup;
   placeSub: Subscription;
+  isLoading:boolean;
+  placeId:string;
+  
   constructor(private activatedRoute:ActivatedRoute,
     private placeService:PlacesService,
     private navController:NavController,
@@ -28,9 +31,11 @@ export class EditOfferPage implements OnInit {
           this.navController.navigateBack('/places/tabs/offers')
           return 
         }
+        this.isLoading = true;
+        this.placeId = paramMap.get("placeId");
         this.placeSub = this.placeService.getplace(paramMap.get("placeId")).subscribe(place=>{
           this.place = place;
-        })
+        
         this.form = new FormGroup({
           title:new FormControl(this.place.title,{
             updateOn:'blur',
@@ -42,8 +47,10 @@ export class EditOfferPage implements OnInit {
             validators:[Validators.required, Validators.maxLength(180)]
           }
         )
-        })
-      })
+        });
+        this.isLoading = false;
+      });
+      });
     }
 
     onEditOffer(){
