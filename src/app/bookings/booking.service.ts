@@ -99,12 +99,18 @@ export class BookingService {
   }
 
   deleteBooking(bookingId: string) {
-    return this.bookings.pipe(
+    return this.http.delete(`https://ionic-hotel-booking-6722e.firebaseio.com/bookings/${bookingId}.json`).pipe(
+      switchMap(()=>{
+        return this.bookings;
+      }),
       take(1),
-      delay(1000),
-      tap((bookings: Booking[]) => {
-        this._bookings.next(bookings.filter(booking=> booking.id !== bookingId));
-      })
-    );
+      tap(
+        bookings=>{
+          this._bookings.next(bookings.filter(booking=> booking.id !== bookingId));
+          
+        }
+      )
+    )
+   
   }
 }
