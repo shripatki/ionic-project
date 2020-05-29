@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Output, EventEmitter } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { MapModalComponent } from '../map-modal/map-modal.component';
 import { HttpClient } from '@angular/common/http';
@@ -6,6 +6,7 @@ import { map } from 'rxjs/internal/operators/map';
 import { switchMap } from 'rxjs/operators';
 import { of } from 'rxjs';
 import { PlaceLocation } from 'src/app/places/location.model';
+import { environment } from 'src/environments/environment';
 
 @Component({
   selector: 'app-location-picker',
@@ -13,6 +14,7 @@ import { PlaceLocation } from 'src/app/places/location.model';
   styleUrls: ['./location-picker.component.scss'],
 })
 export class LocationPickerComponent implements OnInit {
+  @Output() locationPick = new EventEmitter<PlaceLocation>();
   selectedLocationImage:string;
   isLoading:boolean;
   constructor(private modalController:ModalController,private http:HttpClient) { }
@@ -41,6 +43,7 @@ export class LocationPickerComponent implements OnInit {
           pickedLocation.staticImageUrl = staticMapImage;
           this.selectedLocationImage = staticMapImage;
           this.isLoading = false;
+          this.locationPick.emit(pickedLocation);
         });
       })
       modalEle.present();
@@ -48,7 +51,7 @@ export class LocationPickerComponent implements OnInit {
   }
 
   private getAddress(latlag){
-    return this.http.get<any>(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlag.lat},${latlag.lng}&key=AIzaSyDUiVw7mh_rWlMgQ0EvAxqguMTS040qFpA`).pipe(
+    return this.http.get<any>(`https://maps.googleapis.com/maps/api/geocode/json?latlng=${latlag.lat},${latlag.lng}&key=${environment.G_API_KEY}`).pipe(
       map((geoData:any)=>{
         if(!geoData && !geoData.results && geoData.results.length <=0){
           return null
@@ -61,7 +64,7 @@ export class LocationPickerComponent implements OnInit {
   private getMapImage(mapData){
     return `https://maps.googleapis.com/maps/api/staticmap?center=${mapData.lat},${mapData.lng}&zoom=16&size=500x300&maptype=roadmap
     &markers=color:red%7Clabel:S%7C${mapData.lat},${mapData.lng}
-    &key=AIzaSyDUiVw7mh_rWlMgQ0EvAxqguMTS040qFpA`
+    &key=${environment.G_API_KEY}`
   }
 
 }

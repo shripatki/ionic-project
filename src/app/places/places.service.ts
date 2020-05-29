@@ -4,6 +4,7 @@ import { AuthService } from "../auth/auth.service";
 import { BehaviorSubject, of } from "rxjs";
 import { take, map, tap, delay, switchMap } from "rxjs/operators";
 import { HttpClient } from "@angular/common/http";
+import { PlaceLocation } from './location.model';
 
 interface PlaceData {
   title: string;
@@ -13,6 +14,7 @@ interface PlaceData {
   availableFrom: string;
   availableTo: string;
   userId: string;
+  location:PlaceLocation;
 }
 @Injectable({
   providedIn: "root",
@@ -45,7 +47,8 @@ export class PlacesService {
                   resdata[key].price,
                   new Date(resdata[key].availableFrom),
                   new Date(resdata[key].availableTo),
-                  resdata[key].userId
+                  resdata[key].userId,
+                  resdata[key].location
                 )
               );
             }
@@ -73,7 +76,8 @@ export class PlacesService {
             placeData.price,
             new Date(placeData.availableFrom),
             new Date(placeData.availableTo),
-            placeData.userId
+            placeData.userId,
+            placeData.location
           );
         })
       );
@@ -84,7 +88,8 @@ export class PlacesService {
     description: string,
     price: number,
     dateFrom: Date,
-    dateTo: Date
+    dateTo: Date,
+    location:PlaceLocation
   ) {
     const newPlace = new Place(
       Math.random().toString(),
@@ -94,7 +99,8 @@ export class PlacesService {
       price,
       dateFrom,
       dateTo,
-      this.authService.userId
+      this.authService.userId,
+      location
     );
     return this.http
       .post<{ name: string }>(
@@ -136,7 +142,8 @@ export class PlacesService {
           oldPlace.price,
           oldPlace.availableFrom,
           oldPlace.availableTo,
-          oldPlace.userId
+          oldPlace.userId,
+          oldPlace.location
         );
         return this.http.put(
           `https://ionic-hotel-booking-6722e.firebaseio.com/offer-places/${placeId}.json`,
