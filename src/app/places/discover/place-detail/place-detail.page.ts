@@ -13,6 +13,8 @@ import { CreateBookingComponent } from "../../../bookings/create-booking/create-
 import { Subscription } from "rxjs";
 import { BookingService } from "src/app/bookings/booking.service";
 import { AuthService } from 'src/app/auth/auth.service';
+import { MapModalComponent } from 'src/app/shared/pickers/map-modal/map-modal.component';
+import { PlaceLocation } from '../../location.model';
 
 @Component({
   selector: "app-place-detail",
@@ -138,6 +140,16 @@ export class PlaceDetailPage implements OnInit {
       });
   }
 
+  onShowFullMap(location:PlaceLocation){
+    this.modalController.create({component:MapModalComponent,componentProps:{
+      center:{lat: location.lat, lng: location.lng},
+      selectable:false,
+      closeButtonText:'Close',
+      title: location.address
+    }}).then(modlEle=>{
+      modlEle.present();
+    })
+  }
   ngOnDestroy(): void {
     //Called once, before the instance is destroyed.
     //Add 'implements OnDestroy' to the class.
