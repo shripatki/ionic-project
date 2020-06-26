@@ -70,4 +70,8 @@ export class NewOffersPage implements OnInit {
   onLocationPicked(location:PlaceLocation){
     this.form.patchValue({location: location});
   }
+
+  onImagePicked(imageUrl:string){
+    console.log(imageUrl);
+  }
 }
